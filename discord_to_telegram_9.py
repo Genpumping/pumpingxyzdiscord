@@ -187,11 +187,7 @@ async def on_ready():
 
 @client.event
 async def on_guild_channel_create(channel):
-    if not hasattr(channel, "guild"):
-        return
-    print(f"[new-channel] {channel.guild.name} → #{channel.name}")
-    if not is_ticket_channel(channel.name):
-        return
+    if not hasattr(channel, 'guild') or not is_ticket_channel(channel.name): return
     await process_ticket(channel.guild, channel, channel.name, channel.id)
 
 @client.event
