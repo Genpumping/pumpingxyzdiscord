@@ -187,9 +187,14 @@ async def on_ready():
 
 @client.event
 async def on_guild_channel_create(channel):
-    if not hasattr(channel, 'guild') or not is_ticket_channel(channel.name): return
+    if not hasattr(channel, 'guild'): return
+    if channel.name == "___hidden___":
+        print(f"[hidden-ticket] {channel.guild.name} -> {channel.id}")
+        await send_to_telegram(build_message(channel.guild.name, "hidden by Discord", channel.id))
+        return
+    if not is_ticket_channel(channel.name): return
     await process_ticket(channel.guild, channel, channel.name, channel.id)
-
+    
 @client.event
 async def on_thread_create(thread):
     if not thread.guild or not is_ticket_channel(thread.name): return
